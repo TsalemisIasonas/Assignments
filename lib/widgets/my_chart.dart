@@ -19,18 +19,18 @@ class MyChart extends StatelessWidget {
 
     return Center(
       child: SizedBox(
-        width: 150,
+        width: MediaQuery.of(context).size.width * 0.4,
         height: 150,
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Text('${completedPercent.toString()} %', 
+            Text('${completedPercent.toStringAsPrecision(2)} %', 
             style: TextStyle(color: textColor, fontSize: 14, fontWeight: FontWeight.w200)),
             PieChart(
               PieChartData(
                 startDegreeOffset: -90,
                 sectionsSpace: 0,
-                centerSpaceRadius: 40,
+                centerSpaceRadius: 120,
                 sections: [
                   PieChartSectionData(
                     gradient: LinearGradient(
@@ -44,13 +44,13 @@ class MyChart extends StatelessWidget {
                     ),
                     value: completedPercent,
                     showTitle: false,
-                    radius: 30,
+                    radius: 25,
                   ),
                   PieChartSectionData(
                     color: Colors.grey.shade800,
-                    value: remainingPercent,
+                    value: db.toDoList.isNotEmpty ? remainingPercent : 1.0,
                     showTitle: false,
-                    radius: 30,
+                    radius: 25,
                   ),
                 ],
               ),

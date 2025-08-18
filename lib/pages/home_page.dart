@@ -1,3 +1,4 @@
+import 'package:assignments/util/username_dialog_box.dart';
 import 'package:assignments/widgets/my_chart.dart';
 import 'package:assignments/widgets/tiles_layout.dart';
 import 'package:flutter/material.dart';
@@ -24,13 +25,30 @@ class _HomePageState extends State<HomePage> {
   String _newContent = '';
   DateTime? _newDateTime;
 
+  final TextEditingController userNameController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
+
     if (_myBox.get("TODOLIST") == null) {
       db.createInitialData();
     } else {
       db.loadData();
+    }
+
+    if (_myBox.get("USERNAME") == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return UsernameDialogBox(
+              db: db,
+              userNameController: userNameController,
+            );
+          },
+        );
+      });
     }
   }
 
@@ -76,11 +94,42 @@ class _HomePageState extends State<HomePage> {
     db.updateDataBase();
   }
 
+  void editTask(int index) {
+    String editedTitle = db.toDoList[index][0];
+    String editedContent = db.toDoList[index][1];
+    DateTime? editedDateTime = db.toDoList[index][2];
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return DialogBox(
+          initialTitle: editedTitle,
+          initialContent: editedContent,
+          initialDateTime: editedDateTime,
+          onChangedTitle: (value) => editedTitle = value,
+          onChangedContent: (value) => editedContent = value,
+          onDateTimePicked: (dateTime) => editedDateTime = dateTime,
+          onSave: () {
+            setState(() {
+              db.toDoList[index][0] = editedTitle;
+              db.toDoList[index][1] = editedContent;
+              db.toDoList[index][2] = editedDateTime ?? DateTime.now();
+            });
+            db.updateDataBase();
+            Navigator.of(context).pop();
+          },
+          onCancel: () => Navigator.of(context).pop(),
+        );
+      },
+    );
+  }
+
   Widget buildTasksLayout() {
     return TilesLayout(
       db: db,
       onChanged: checkBoxChanged,
       onDelete: deleteTask,
+      onEdit: editTask,
     );
   }
 
@@ -91,14 +140,19 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
       backgroundColor: backgroundColor,
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         onPressed: createNewTask,
         backgroundColor: Colors.white,
-        child: const Icon(Icons.add, color: Colors.black),
+        child: const Icon(
+          Icons.add,
+          color: Colors.black,
+          size: 35,
+        ),
       ),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -130,30 +184,38 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                   Padding(
+                  Padding(
                     padding: const EdgeInsets.only(left: 20.0, top: 35.0),
                     child: Text(
-                      "Welcome Back",
+                      db.userName != null
+                      ?"Welcome Back, ${db.userName}"
+                      : "Welcome Back",
                       style: TextStyle(
                         color: textColor,
                         letterSpacing: 2,
-                        fontSize: 30,
+                        fontSize: 35,
                         fontWeight: FontWeight.w300,
                       ),
                     ),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.25),
                   Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
+                    padding: const EdgeInsets.only(left: 25.0),
                     child: Text(
-                      "You have completed ${db.toDoList.where((task) => task.length > 3 && task[3] == true).length} "
-                      "out of ${db.toDoList.length} tasks",
+                      db.toDoList.isNotEmpty
+                          ? "Completed: ${db.toDoList.where((task) => task.length > 3 && task[3] == true).length} "
+                              "out of ${db.toDoList.length} tasks"
+                          : "You haven't set any tasks",
                       style: TextStyle(
                         color: textColor,
-                        fontSize: 15,
+                        fontSize: 17,
                         fontWeight: FontWeight.w300,
                       ),
                     ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.25,
+                    child: Center(
+                        child: Image.asset('assets/transparent_logo.png')),
                   ),
                 ],
               ),
@@ -204,11 +266,7 @@ class _HomePageState extends State<HomePage> {
                     _selectedIndex = 0;
                   });
                 },
-                icon: Icon(
-                  Icons.home,
-                  size: 35,
-                  color: navbarIconColor
-                ),
+                icon: Icon(Icons.home, size: 35, color: navbarIconColor),
               ),
               const Spacer(),
               IconButton(

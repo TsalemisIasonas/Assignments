@@ -2,6 +2,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 class ToDoDataBase {
   List toDoList = [];
+  String? userName;
 
   // reference our box
   final _myBox = Hive.box('mybox');
@@ -32,10 +33,16 @@ class ToDoDataBase {
         return task; // already in new format
       }
     }).toList();
+
+    //final userName = _myBox.get('USERNAME');
   }
 
   // update the database
   void updateDataBase() {
     _myBox.put("TODOLIST", toDoList);
+  }
+
+  void storeName(){
+    _myBox.put("USERNAME", userName);
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants/colors.dart';
 
 class DialogBox extends StatefulWidget {
   final VoidCallback onSave;
@@ -6,6 +7,9 @@ class DialogBox extends StatefulWidget {
   final Function(String) onChangedTitle;
   final Function(String) onChangedContent;
   final Function(DateTime) onDateTimePicked;
+  final String? initialTitle;
+  final String? initialContent;
+  final DateTime? initialDateTime;
 
   const DialogBox({
     super.key,
@@ -14,6 +18,9 @@ class DialogBox extends StatefulWidget {
     required this.onChangedTitle,
     required this.onChangedContent,
     required this.onDateTimePicked,
+    this.initialTitle,
+    this.initialContent,
+    this.initialDateTime,
   });
 
   @override
@@ -23,13 +30,17 @@ class DialogBox extends StatefulWidget {
 class _DialogBoxState extends State<DialogBox>
     with SingleTickerProviderStateMixin {
   DateTime? selectedDateTime;
-
+  late TextEditingController titleController;
+  late TextEditingController contentController;
   late AnimationController _controller;
   late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
+    titleController = TextEditingController(text: widget.initialTitle ?? '');
+    contentController = TextEditingController(text: widget.initialContent ?? '');
+    selectedDateTime = widget.initialDateTime;
     _controller = AnimationController(
       duration: const Duration(milliseconds: 400),
       vsync: this,
@@ -43,6 +54,8 @@ class _DialogBoxState extends State<DialogBox>
   @override
   void dispose() {
     _controller.dispose();
+    titleController.dispose();
+    contentController.dispose();
     super.dispose();
   }
 
@@ -53,13 +66,11 @@ class _DialogBoxState extends State<DialogBox>
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),
     );
-
     if (date != null) {
       final time = await showTimePicker(
         context: context,
         initialTime: TimeOfDay.fromDateTime(selectedDateTime ?? DateTime.now()),
       );
-
       if (time != null) {
         final combined = DateTime(
           date.year,
@@ -68,11 +79,9 @@ class _DialogBoxState extends State<DialogBox>
           time.hour,
           time.minute,
         );
-
         setState(() {
           selectedDateTime = combined;
         });
-
         widget.onDateTimePicked(combined);
       }
     }
@@ -80,77 +89,98 @@ class _DialogBoxState extends State<DialogBox>
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height * 0.5;
+    final height = MediaQuery.of(context).size.width * 0.8;
+    final width = MediaQuery.of(context).size.width * 0.8;
 
     return Center(
       child: ScaleTransition(
         scale: _animation,
         child: AlertDialog(
+          scrollable: true,
           backgroundColor: Colors.grey[900],
           insetPadding: const EdgeInsets.symmetric(horizontal: 20),
           contentPadding: const EdgeInsets.all(20),
           content: SizedBox(
             height: height,
+            width: width,
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               children: [
-                // Top icons
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: TextField(
-                        style: const TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.w300, letterSpacing: 1.2),
-                        decoration: const InputDecoration(
-                          hintText: "Title",
-                          hintStyle: TextStyle(color: Colors.white54),
-                          border: InputBorder.none,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 12.0),
+                        child: TextField(
+                          controller: titleController,
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 25,
+                              fontWeight: FontWeight.w300,
+                              letterSpacing: 1.2),
+                          decoration: const InputDecoration(
+                            hintText: "Title",
+                            hintStyle: TextStyle(color: Colors.white54),
+                            border: InputBorder.none,
+                          ),
+                          onChanged: widget.onChangedTitle,
                         ),
-                        onChanged: widget.onChangedTitle,
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.check, color: Color.fromARGB(255, 74, 201, 140)),
-                      onPressed: widget.onSave,
+                      icon: const Icon(Icons.check,
+                          color: Color.fromARGB(255, 74, 201, 140)),
+                      onPressed: () {
+                        widget.onChangedTitle(titleController.text);
+                        widget.onChangedContent(contentController.text);
+                        widget.onSave();
+                      },
                     ),
                     IconButton(
-                      icon: const Icon(Icons.close, color: Color.fromARGB(255, 224, 61, 61)),
-                      onPressed: widget.onCancel,
+                      icon: const Icon(Icons.close,
+                          color: Color.fromARGB(255, 224, 61, 61)),
+                      onPressed: () {
+                        titleController.clear();
+                        contentController.clear();
+                        widget.onCancel();
+                      },
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 10),
-
-                // Content input
-                TextField(
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w300),
-                  maxLines: 3,
-                  decoration: const InputDecoration(
-                    hintText: "Content",
-                    hintStyle: TextStyle(color: Colors.white54),
-                    border: InputBorder.none,
-                  ),
-                  onChanged: widget.onChangedContent,
-                ),
-
-                const SizedBox(height: 20),
-
-                // Date & Time Picker (Icons only)
-                Center(
-                  child: TextButton(
-                    onPressed: _pickDateTime,
-                    child: Column(
-                      children: [
-                        const Text("Pick Date & Time", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w200)),
-                        const SizedBox(width: 15),
-                        if (selectedDateTime != null)
-                          Text(
-                            "${selectedDateTime!.toLocal()}".split('.')[0],
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                      ],
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: TextField(
+                    controller: contentController,
+                    style: const TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w300),
+                    maxLines: 3,
+                    decoration: const InputDecoration(
+                      hintText: "Content",
+                      hintStyle: TextStyle(color: Colors.white54),
+                      border: InputBorder.none,
                     ),
+                    onChanged: widget.onChangedContent,
+                  ),
+                ),
+                const SizedBox(height: 100),
+                TextButton(
+                  onPressed: _pickDateTime,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text("Pick Time & Date",
+                          style: TextStyle(
+                              color: lightGreen,
+                              fontWeight: FontWeight.w200,
+                              fontSize: 25)),
+                      const SizedBox(width: 15),
+                      if (selectedDateTime != null)
+                        Text(
+                          "${selectedDateTime!.toLocal()}".split('.')[0],
+                          style: TextStyle(color: darkGreen),
+                        ),
+                    ],
                   ),
                 ),
               ],
