@@ -139,6 +139,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final double height = MediaQuery.of(context).size.height;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
@@ -163,7 +164,7 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: const EdgeInsets.all(4.0),
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.4,
+              height: height * 0.45,
               width: double.infinity,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -188,12 +189,12 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.only(left: 20.0, top: 35.0),
                     child: Text(
                       db.userName != null
-                      ?"Welcome Back, ${db.userName}"
-                      : "Welcome Back",
+                          ? "Hi, ${db.userName.toString()[0].toUpperCase() + db.userName.toString().substring(1)}"
+                          : "Welcome Back",
                       style: TextStyle(
                         color: textColor,
                         letterSpacing: 2,
-                        fontSize: 35,
+                        fontSize: 30,
                         fontWeight: FontWeight.w300,
                       ),
                     ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'pages/home_page.dart';
+import '../constants/colors.dart';
 
 void main() async {
   // init the hive
@@ -18,10 +19,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
-      // theme: ThemeData(primarySwatch: Colors.yellow),
+      home: const HomePage(),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 77, 145, 79)), // sets primary & secondary colors
+        primaryColor: lightGreen,
+      ),
     );
   }
 }

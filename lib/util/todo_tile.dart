@@ -34,7 +34,8 @@ class ToDoTile extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(12),
           child: Container(
-            width: 300, // FIX: set fixed width to avoid infinite width error
+            constraints: const BoxConstraints(maxWidth: 300),
+            width: 300,
             decoration: BoxDecoration(
               color: tileBackgroundColor,
               borderRadius: BorderRadius.circular(12),
@@ -44,13 +45,14 @@ class ToDoTile extends StatelessWidget {
               ),
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
                   height: 70,
                   padding: const EdgeInsets.all(5),
                   color: tileHeaderColor,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Checkbox(
                         value: taskCompleted,
@@ -58,11 +60,11 @@ class ToDoTile extends StatelessWidget {
                         activeColor: Colors.white,
                         checkColor: Colors.black,
                       ),
-                      Flexible(
+                      Expanded(
                         child: Text(
+                          taskTitle[0].toUpperCase() + taskTitle.substring(1),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
-                          taskTitle[0].toUpperCase() + taskTitle.substring(1),
                           style: TextStyle(
                             color: textColor,
                             fontWeight: FontWeight.w600,
@@ -70,57 +72,59 @@ class ToDoTile extends StatelessWidget {
                           ),
                         ),
                       ),
-                      IconButton(
-                        padding: EdgeInsets.zero,
-                        onPressed: deleteFunction,
-                        icon: const Icon(Icons.delete,
-                            color: Colors.white, size: 20),
-                      ),
-                      IconButton(
-                        padding: EdgeInsets.zero,
-                        onPressed: editFunction,
-                        icon: const Icon(Icons.edit,
-                            color: Colors.white, size: 20),
-                      ),
                     ],
                   ),
                 ),
-                Container(
+                Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                  color: tileBackgroundColor,
-                  child: Expanded(
-                    child: Text(
-                      overflow: TextOverflow.ellipsis,
-                      taskContent.isNotEmpty
-                          ? taskContent[0] + taskContent.substring(1)
-                          : 'No content to show',
-                      style: TextStyle(
-                        color: textColor,
-                        fontWeight: FontWeight.w400,
-                        decoration: taskCompleted
-                            ? TextDecoration.lineThrough
-                            : TextDecoration.none,
-                      ),
+                  child: Text(
+                    taskContent.isNotEmpty
+                        ? taskContent[0] + taskContent.substring(1)
+                        : 'No content to show',
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: textColor,
+                      fontWeight: FontWeight.w400,
+                      decoration: taskCompleted
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
                     ),
                   ),
                 ),
-
-                // Bottom datetime center aligned
-                Container(
+                Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
-                  alignment: Alignment.center,
                   child: Text(
                     "Due Date: "
                     "${taskDateTime.day.toString().padLeft(2, '0')}/"
                     "${taskDateTime.month.toString().padLeft(2, '0')}/"
                     "${taskDateTime.year}",
+                    textAlign: TextAlign.center,
                     style: const TextStyle(
                       color: Colors.white54,
                       fontSize: 12,
                       fontWeight: FontWeight.w300,
                     ),
                   ),
+                ),
+                const SizedBox(height: 50),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: deleteFunction,
+                      icon: const Icon(Icons.delete,
+                          color: Colors.white, size: 25),
+                    ),
+                    IconButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: editFunction,
+                      icon:
+                          const Icon(Icons.edit, color: Colors.white, size: 25),
+                    ),
+                  ],
                 ),
               ],
             ),

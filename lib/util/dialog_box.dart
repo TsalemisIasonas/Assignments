@@ -104,6 +104,7 @@ class _DialogBoxState extends State<DialogBox>
             height: height,
             width: width,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -167,17 +168,17 @@ class _DialogBoxState extends State<DialogBox>
                 TextButton(
                   onPressed: _pickDateTime,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text("Pick Time & Date",
                           style: TextStyle(
                               color: lightGreen,
                               fontWeight: FontWeight.w200,
-                              fontSize: 25)),
+                              fontSize: 20)),
                       const SizedBox(width: 15),
                       if (selectedDateTime != null)
                         Text(
-                          "${selectedDateTime!.toLocal()}".split('.')[0],
+                          "Time and Date Selected",
                           style: TextStyle(color: darkGreen),
                         ),
                     ],

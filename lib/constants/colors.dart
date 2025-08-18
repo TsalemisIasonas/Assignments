@@ -15,6 +15,6 @@ Color backgroundColor = const Color.fromARGB(255, 0, 0, 0);
 Color textColor = const Color.fromARGB(255, 255, 255, 255);
 
 
-Color gradientColor1 = const Color.fromARGB(255, 4, 81, 63);
-Color gradientColor2 = const Color.fromARGB(255, 12, 113, 105);
-Color gradientColor3 = const Color.fromARGB(255, 75, 171, 149); 
+Color gradientColor1 = const Color.fromARGB(255, 4, 81, 19);
+Color gradientColor2 = const Color.fromARGB(255, 6, 117, 28);
+Color gradientColor3 = const Color.fromARGB(255, 10, 182, 44); 
