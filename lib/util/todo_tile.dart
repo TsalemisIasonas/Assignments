@@ -35,8 +35,7 @@ class ToDoTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           child: Container(
             constraints: const BoxConstraints(maxWidth: 300),
-            width: 250,
-            height: 250,
+            width: 230,
             decoration: BoxDecoration(
               color: tileBackgroundColor,
               borderRadius: BorderRadius.circular(12),
@@ -49,7 +48,7 @@ class ToDoTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                // Header
+                // ...existing code...
                 Container(
                   height: 65,
                   padding: const EdgeInsets.all(5),
@@ -81,7 +80,6 @@ class ToDoTile extends StatelessWidget {
                     ],
                   ),
                 ),
-                // Content
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                   child: Text(
@@ -92,14 +90,13 @@ class ToDoTile extends StatelessWidget {
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 16,
                       color: taskCompleted ? lightGreen : textColor,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
                 ),
                 const Spacer(),
-                // Due Date
                 Text(
                   "Due Date: "
                   "${taskDateTime.day.toString().padLeft(2, '0')}/"
@@ -108,11 +105,10 @@ class ToDoTile extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white54,
-                    fontSize: 17,
+                    fontSize: 15,
                     fontWeight: FontWeight.w300,
                   ),
                 ),
-                // Icons
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

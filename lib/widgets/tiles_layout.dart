@@ -23,7 +23,7 @@ class TilesLayout extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 30.0, top: 20.0),
+          padding: EdgeInsets.symmetric(horizontal: AppBar().titleSpacing ?? 16.0, vertical: 5.0),
           child: Row(
             children: [
               Text(
@@ -40,25 +40,22 @@ class TilesLayout extends StatelessWidget {
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 30.0, right: 30),
-          child: SizedBox(
-            height: 250,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: db.toDoList.length,
-              itemBuilder: (context, index) {
-                return ToDoTile(
-                  taskTitle: db.toDoList[index][0],
-                  taskContent: db.toDoList[index][1],
-                  taskDateTime: db.toDoList[index][2], //?? DateTime.now(),
-                  taskCompleted: db.toDoList[index][3],
-                  onChanged: (value) => onChanged(value, index),
-                  deleteFunction: () => onDelete(index),
-                  editFunction: () => onEdit(index),
-                );
-              },
-            ),
+        SizedBox(
+          height: 270,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: db.toDoList.length,
+            itemBuilder: (context, index) {
+              return ToDoTile(
+                taskTitle: db.toDoList[index][0],
+                taskContent: db.toDoList[index][1],
+                taskDateTime: db.toDoList[index][2],
+                taskCompleted: db.toDoList[index][3],
+                onChanged: (value) => onChanged(value, index),
+                deleteFunction: () => onDelete(index),
+                editFunction: () => onEdit(index),
+              );
+            },
           ),
         ),
       ],

@@ -177,13 +177,13 @@ class _HomePageState extends State<HomePage> {
             color: Colors.black.withOpacity(0.95),
             icon: const Icon(Icons.more_vert, color: Colors.white),
             onSelected: (value) {
-              if (value == 'Edit UserName') {
+              if (value == 'Edit Username') {
                 editUserName();
               }
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
               const PopupMenuItem<String>(
-                value: 'Edit',
+                value: 'Edit Username',
                 child: Text(
                   'Edit',
                   style: TextStyle(color: Colors.white, fontSize: 16),
