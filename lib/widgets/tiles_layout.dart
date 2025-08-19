@@ -24,14 +24,20 @@ class TilesLayout extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 30.0, top: 20.0),
-          child: Text(
-            db.toDoList.isNotEmpty ? "My Tasks" : "No tasks yet. Add a new task",
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-              letterSpacing: 1.2,
-            ),
+          child: Row(
+            children: [
+              Text(
+                db.toDoList.isNotEmpty ? "My Tasks" : "No tasks yet. Add a new task",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 1.2,
+                ),
+              ),
+              const Spacer(),
+              IconButton(icon: const Icon(Icons.search, color: Colors.white), onPressed: () {})
+            ],
           ),
         ),
         Padding(

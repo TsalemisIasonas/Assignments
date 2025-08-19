@@ -160,6 +160,17 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       appBar: AppBar(
+        title: Text(
+          db.userName != null
+              ? "Hi, ${db.userName.toString()[0].toUpperCase() + db.userName.toString().substring(1)}"
+              : "Welcome Back",
+          style: TextStyle(
+            color: textColor,
+            letterSpacing: 2,
+            fontSize: 35,
+            fontWeight: FontWeight.w300,
+          ),
+        ),
         backgroundColor: Colors.transparent,
         actions: [
           PopupMenuButton<String>(
@@ -217,21 +228,10 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 20.0, top: 25.0),
-                    child: Text(
-                      db.userName != null
-                          ? "Hi, ${db.userName.toString()[0].toUpperCase() + db.userName.toString().substring(1)}"
-                          : "Welcome Back",
-                      style: TextStyle(
-                        color: textColor,
-                        letterSpacing: 2,
-                        fontSize: 30,
-                        fontWeight: FontWeight.w300,
-                      ),
+                    padding: EdgeInsets.only(
+                      left: AppBar().titleSpacing ?? 16.0,
+                      top: AppBar().preferredSize.height + 20.0,
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 25.0),
                     child: Text(
                       db.toDoList.isNotEmpty
                           ? "Completed: ${db.toDoList.where((task) => task.length > 3 && task[3] == true).length} "
@@ -245,7 +245,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.25,
+                    height: MediaQuery.of(context).size.height * 0.3,
                     child: Center(
                         child: Image.asset('assets/transparent_logo.png')),
                   ),
