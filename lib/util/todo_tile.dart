@@ -35,7 +35,8 @@ class ToDoTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           child: Container(
             constraints: const BoxConstraints(maxWidth: 300),
-            width: 300,
+            width: 250,
+            height: 250,
             decoration: BoxDecoration(
               color: tileBackgroundColor,
               borderRadius: BorderRadius.circular(12),
@@ -46,9 +47,11 @@ class ToDoTile extends StatelessWidget {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                // Header
                 Container(
-                  height: 70,
+                  height: 65,
                   padding: const EdgeInsets.all(5),
                   color: tileHeaderColor,
                   child: Row(
@@ -78,55 +81,50 @@ class ToDoTile extends StatelessWidget {
                     ],
                   ),
                 ),
+                // Content
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                  child: Expanded(
-                    child: Text(
-                      taskContent.isNotEmpty
-                          ? taskContent[0].toUpperCase() +
-                              taskContent.substring(1)
-                          : 'No content to show',
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: taskCompleted ? lightGreen : textColor,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                   child: Text(
-                    "Due Date: "
-                    "${taskDateTime.day.toString().padLeft(2, '0')}/"
-                    "${taskDateTime.month.toString().padLeft(2, '0')}/"
-                    "${taskDateTime.year}",
+                    maxLines: 5,
+                    taskContent.isNotEmpty
+                        ? taskContent[0].toUpperCase() + taskContent.substring(1)
+                        : 'No content to show',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white54,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w300,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: taskCompleted ? lightGreen : textColor,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                 ),
-                const SizedBox(height: 50),
+                const Spacer(),
+                // Due Date
+                Text(
+                  "Due Date: "
+                  "${taskDateTime.day.toString().padLeft(2, '0')}/"
+                  "${taskDateTime.month.toString().padLeft(2, '0')}/"
+                  "${taskDateTime.year}",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white54,
+                    fontSize: 17,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+                // Icons
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
                       padding: EdgeInsets.zero,
                       onPressed: deleteFunction,
-                      icon: const Icon(Icons.delete,
-                          color: Colors.white, size: 25),
+                      icon: const Icon(Icons.delete, color: Colors.white, size: 25),
                     ),
                     IconButton(
                       padding: EdgeInsets.zero,
                       onPressed: editFunction,
-                      icon:
-                          const Icon(Icons.edit, color: Colors.white, size: 25),
+                      icon: const Icon(Icons.edit, color: Colors.white, size: 25),
                     ),
                   ],
                 ),

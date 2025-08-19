@@ -11,11 +11,12 @@ class UsernameDialogBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Colors.black87,
+      backgroundColor: Colors.black.withOpacity(0.95),
       content: SizedBox(
         width: 200,
         height: 200,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
@@ -29,7 +30,7 @@ class UsernameDialogBox extends StatelessWidget {
                 hintText: "Enter your Name",
               ),
             ),
-            const SizedBox(height: 100),
+            const SizedBox(height: 80),
             TextButton(
               child: const Text("Save", style: TextStyle(fontSize: 20),),
               onPressed: () {

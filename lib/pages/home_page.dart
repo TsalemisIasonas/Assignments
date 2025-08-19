@@ -161,6 +161,33 @@ class _HomePageState extends State<HomePage> {
       ),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        actions: [
+          PopupMenuButton<String>(
+            color: Colors.black.withOpacity(0.95),
+            icon: const Icon(Icons.more_vert, color: Colors.white),
+            onSelected: (value) {
+              if (value == 'Edit UserName') {
+                editUserName();
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'Edit',
+                child: Text(
+                  'Edit',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ),
+              const PopupMenuItem<String>(
+                value: 'Delete',
+                child: Text(
+                  'Delete',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -190,43 +217,17 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 20.0, top: 35.0),
-                    child: Row(
-                      children: [
-                        Text(
-                          db.userName != null
-                              ? "Hi, ${db.userName.toString()[0].toUpperCase() + db.userName.toString().substring(1)}"
-                              : "Welcome Back",
-                          style: TextStyle(
-                            color: textColor,
-                            letterSpacing: 2,
-                            fontSize: 30,
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                        const Spacer(),
-                        PopupMenuButton<String>(
-                          icon: const Icon(Icons.more_vert, color: Colors.white),
-                          onSelected: (value) {
-                            if (value == 'Edit') {
-                              editUserName();
-                            } else if (value == 'Delete') {
-                              // Call delete function
-                            }
-                          },
-                          itemBuilder: (BuildContext context) =>
-                              <PopupMenuEntry<String>>[
-                            const PopupMenuItem<String>(
-                              value: 'Edit',
-                              child: Text('Edit', style: TextStyle(color: Colors.red),),
-                            ),
-                            const PopupMenuItem<String>(
-                              value: 'Delete',
-                              child: Text('Delete'),
-                            ),
-                          ],
-                        ),
-                      ],
+                    padding: const EdgeInsets.only(left: 20.0, top: 25.0),
+                    child: Text(
+                      db.userName != null
+                          ? "Hi, ${db.userName.toString()[0].toUpperCase() + db.userName.toString().substring(1)}"
+                          : "Welcome Back",
+                      style: TextStyle(
+                        color: textColor,
+                        letterSpacing: 2,
+                        fontSize: 30,
+                        fontWeight: FontWeight.w300,
+                      ),
                     ),
                   ),
                   Padding(
