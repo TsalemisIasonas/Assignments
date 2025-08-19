@@ -9,16 +9,20 @@ class ToDoTile extends StatelessWidget {
   final Function(bool?)? onChanged;
   final VoidCallback deleteFunction;
   final VoidCallback editFunction;
+  final bool isPinned;
+  final VoidCallback onPin;
 
   const ToDoTile(
-      {super.key,
-      required this.taskTitle,
-      required this.taskContent,
-      required this.taskDateTime,
-      required this.taskCompleted,
-      required this.onChanged,
-      required this.deleteFunction,
-      required this.editFunction});
+  {super.key,
+  required this.taskTitle,
+  required this.taskContent,
+  required this.taskDateTime,
+  required this.taskCompleted,
+  required this.onChanged,
+  required this.deleteFunction,
+  required this.editFunction,
+  required this.isPinned,
+  required this.onPin});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +39,7 @@ class ToDoTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           child: Container(
             constraints: const BoxConstraints(maxWidth: 300),
-            width: 230,
+            width: 250,
             decoration: BoxDecoration(
               color: tileBackgroundColor,
               borderRadius: BorderRadius.circular(12),
@@ -48,7 +52,6 @@ class ToDoTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                // ...existing code...
                 Container(
                   height: 65,
                   padding: const EdgeInsets.all(5),
@@ -70,12 +73,20 @@ class ToDoTile extends StatelessWidget {
                           style: TextStyle(
                             color: textColor,
                             fontWeight: FontWeight.w600,
-                            fontSize: 22,
+                            fontSize: 18,
                             decoration: taskCompleted
                                 ? TextDecoration.lineThrough
                                 : TextDecoration.none,
                           ),
                         ),
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          isPinned ? Icons.push_pin : Icons.push_pin_outlined,
+                          color: isPinned ? Colors.white : Colors.white,
+                        ),
+                        tooltip: isPinned ? 'Unpin' : 'Pin',
+                        onPressed: onPin,
                       ),
                     ],
                   ),

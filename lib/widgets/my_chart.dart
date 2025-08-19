@@ -4,7 +4,10 @@ import 'package:assignments/data/database.dart';
 import '../constants/colors.dart';
 
 class MyChart extends StatelessWidget {
-  const MyChart({super.key, required this.db,});
+  const MyChart({
+    super.key,
+    required this.db,
+  });
 
   final ToDoDataBase db;
 
@@ -14,8 +17,10 @@ class MyChart extends StatelessWidget {
     int completedTasks = db.toDoList.where((task) => task[3] == true).length;
     int remainingTasks = totalTasks - completedTasks;
 
-    double completedPercent = totalTasks == 0 ? 0 : (completedTasks / totalTasks) * 100;
-    double remainingPercent = totalTasks == 0 ? 0 : (remainingTasks / totalTasks) * 100;
+    double completedPercent =
+        totalTasks == 0 ? 0 : (completedTasks / totalTasks) * 100;
+    double remainingPercent =
+        totalTasks == 0 ? 0 : (remainingTasks / totalTasks) * 100;
 
     return Center(
       child: SizedBox(
@@ -24,8 +29,11 @@ class MyChart extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Text('${completedPercent.toStringAsPrecision(2)} %', 
-            style: TextStyle(color: textColor, fontSize: 14, fontWeight: FontWeight.w200)),
+            Text(
+              '${completedPercent.toStringAsPrecision(2)} %',
+              style: TextStyle(
+                  color: textColor, fontSize: 25, fontWeight: FontWeight.w300),
+            ),
             PieChart(
               PieChartData(
                 startDegreeOffset: -90,
@@ -55,7 +63,6 @@ class MyChart extends StatelessWidget {
                 ],
               ),
             ),
-            
           ],
         ),
       ),

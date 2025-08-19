@@ -134,6 +134,17 @@ class _HomePageState extends State<HomePage> {
       onChanged: checkBoxChanged,
       onDelete: deleteTask,
       onEdit: editTask,
+      onPin: (int index, bool pin) {
+        setState(() {
+          // Ensure the 5th element exists for pin state
+          if (db.toDoList[index].length < 5) {
+            db.toDoList[index].add(pin);
+          } else {
+            db.toDoList[index][4] = pin;
+          }
+        });
+        db.updateDataBase();
+      },
     );
   }
 
