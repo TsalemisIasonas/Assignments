@@ -29,8 +29,9 @@ class UsernameDialogBox extends StatelessWidget {
                 hintText: "Enter your Name",
               ),
             ),
+            const SizedBox(height: 100),
             TextButton(
-              child: const Text("Save"),
+              child: const Text("Save", style: TextStyle(fontSize: 20),),
               onPressed: () {
                 db.userName = userNameController.text;
                 db.storeName();

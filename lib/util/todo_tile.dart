@@ -68,7 +68,10 @@ class ToDoTile extends StatelessWidget {
                           style: TextStyle(
                             color: textColor,
                             fontWeight: FontWeight.w600,
-                            fontSize: 20,
+                            fontSize: 22,
+                            decoration: taskCompleted
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
                           ),
                         ),
                       ),
@@ -78,23 +81,24 @@ class ToDoTile extends StatelessWidget {
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                  child: Text(
-                    taskContent.isNotEmpty
-                        ? taskContent[0] + taskContent.substring(1)
-                        : 'No content to show',
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: textColor,
-                      fontWeight: FontWeight.w400,
-                      decoration: taskCompleted
-                          ? TextDecoration.lineThrough
-                          : TextDecoration.none,
+                  child: Expanded(
+                    child: Text(
+                      taskContent.isNotEmpty
+                          ? taskContent[0].toUpperCase() +
+                              taskContent.substring(1)
+                          : 'No content to show',
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: taskCompleted ? lightGreen : textColor,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  padding: const EdgeInsets.only(top: 20),
                   child: Text(
                     "Due Date: "
                     "${taskDateTime.day.toString().padLeft(2, '0')}/"
@@ -103,7 +107,7 @@ class ToDoTile extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       color: Colors.white54,
-                      fontSize: 12,
+                      fontSize: 17,
                       fontWeight: FontWeight.w300,
                     ),
                   ),

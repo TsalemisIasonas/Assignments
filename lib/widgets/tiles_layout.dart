@@ -34,22 +34,25 @@ class TilesLayout extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
-          height: 300,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: db.toDoList.length,
-            itemBuilder: (context, index) {
-              return ToDoTile(
-                taskTitle: db.toDoList[index][0],
-                taskContent: db.toDoList[index][1],
-                taskDateTime: db.toDoList[index][2], //?? DateTime.now(),
-                taskCompleted: db.toDoList[index][3],
-                onChanged: (value) => onChanged(value, index),
-                deleteFunction: () => onDelete(index),
-                editFunction: () => onEdit(index),
-              );
-            },
+        Padding(
+          padding: const EdgeInsets.only(left: 30.0, right: 30),
+          child: SizedBox(
+            height: 250,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: db.toDoList.length,
+              itemBuilder: (context, index) {
+                return ToDoTile(
+                  taskTitle: db.toDoList[index][0],
+                  taskContent: db.toDoList[index][1],
+                  taskDateTime: db.toDoList[index][2], //?? DateTime.now(),
+                  taskCompleted: db.toDoList[index][3],
+                  onChanged: (value) => onChanged(value, index),
+                  deleteFunction: () => onDelete(index),
+                  editFunction: () => onEdit(index),
+                );
+              },
+            ),
           ),
         ),
       ],

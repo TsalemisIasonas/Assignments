@@ -39,17 +39,21 @@ class _HomePageState extends State<HomePage> {
 
     if (_myBox.get("USERNAME") == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return UsernameDialogBox(
-              db: db,
-              userNameController: userNameController,
-            );
-          },
-        );
+        editUserName();
       });
     }
+  }
+
+  void editUserName() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return UsernameDialogBox(
+          db: db,
+          userNameController: userNameController,
+        );
+      },
+    );
   }
 
   void checkBoxChanged(bool? value, int index) {
@@ -187,16 +191,42 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 20.0, top: 35.0),
-                    child: Text(
-                      db.userName != null
-                          ? "Hi, ${db.userName.toString()[0].toUpperCase() + db.userName.toString().substring(1)}"
-                          : "Welcome Back",
-                      style: TextStyle(
-                        color: textColor,
-                        letterSpacing: 2,
-                        fontSize: 30,
-                        fontWeight: FontWeight.w300,
-                      ),
+                    child: Row(
+                      children: [
+                        Text(
+                          db.userName != null
+                              ? "Hi, ${db.userName.toString()[0].toUpperCase() + db.userName.toString().substring(1)}"
+                              : "Welcome Back",
+                          style: TextStyle(
+                            color: textColor,
+                            letterSpacing: 2,
+                            fontSize: 30,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                        const Spacer(),
+                        PopupMenuButton<String>(
+                          icon: const Icon(Icons.more_vert, color: Colors.white),
+                          onSelected: (value) {
+                            if (value == 'Edit') {
+                              editUserName();
+                            } else if (value == 'Delete') {
+                              // Call delete function
+                            }
+                          },
+                          itemBuilder: (BuildContext context) =>
+                              <PopupMenuEntry<String>>[
+                            const PopupMenuItem<String>(
+                              value: 'Edit',
+                              child: Text('Edit', style: TextStyle(color: Colors.red),),
+                            ),
+                            const PopupMenuItem<String>(
+                              value: 'Delete',
+                              child: Text('Delete'),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                   Padding(
