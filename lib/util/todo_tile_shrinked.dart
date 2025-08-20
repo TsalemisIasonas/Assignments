@@ -68,7 +68,7 @@ class ToDoTileShrinked extends StatelessWidget {
                 icon: Icon(
                   isPinned ? Icons.push_pin : Icons.push_pin_outlined,
                   color: Colors.white,
-                  size: 20,
+                  size: 17,
                 ),
                 onPressed: onPin,
               ),
