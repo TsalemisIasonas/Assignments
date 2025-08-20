@@ -185,8 +185,8 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.transparent,
         actions: [
           PopupMenuButton<String>(
-            color: Colors.black.withOpacity(0.95),
-            icon: const Icon(Icons.more_vert, color: Colors.white),
+            color: Colors.black,
+            icon: const Icon(Icons.settings, color: Colors.white),
             onSelected: (value) {
               if (value == 'Edit Username') {
                 editUserName();
@@ -195,18 +195,21 @@ class _HomePageState extends State<HomePage> {
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
               const PopupMenuItem<String>(
                 value: 'Edit Username',
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 child: Text(
-                  'Edit',
+                  'Edit Username',
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ),
-              const PopupMenuItem<String>(
-                value: 'Delete',
-                child: Text(
-                  'Delete',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-              ),
+              // const PopupMenuItem<String>( 
+              //   value: 'Delete',
+              //   // We'll apply the same padding here for a consistent look.
+              //   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              //   child: Text(
+              //     'Delete Username',
+              //     style: TextStyle(color: Colors.white, fontSize: 16),
+              //   ),
+              // ),
             ],
           ),
         ],
@@ -214,54 +217,51 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Container(
-              height: height * 0.45,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    lightGreen,
-                    darkGreen,
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
-                  topLeft: Radius.circular(5),
-                  topRight: Radius.circular(5),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: AppBar().titleSpacing ?? 16.0,
-                      top: AppBar().preferredSize.height + 20.0,
-                    ),
-                    child: Text(
-                      db.toDoList.isNotEmpty
-                          ? "Completed: ${db.toDoList.where((task) => task.length > 3 && task[3] == true).length} "
-                              "out of ${db.toDoList.length} tasks"
-                          : "You haven't set any tasks",
-                      style: TextStyle(
-                        color: textColor,
-                        fontSize: 17,
-                        fontWeight: FontWeight.w300,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.3,
-                    child: Center(
-                        child: Image.asset('assets/transparent_logo.png')),
-                  ),
+          Container(
+            height: height * 0.45,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  lightGreen,
+                  darkGreen,
                 ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+                topLeft: Radius.circular(5),
+                topRight: Radius.circular(5),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: (AppBar().titleSpacing ?? 16.0) + 2.0,
+                    top: AppBar().preferredSize.height + 20.0,
+                  ),
+                  child: Text(
+                    db.toDoList.isNotEmpty
+                        ? "Completed: ${db.toDoList.where((task) => task.length > 3 && task[3] == true).length} "
+                            "out of ${db.toDoList.length} tasks"
+                        : "You haven't set any tasks",
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.3,
+                  child:
+                      Center(child: Image.asset('assets/transparent_logo.png')),
+                ),
+              ],
             ),
           ),
           Expanded(
@@ -280,9 +280,8 @@ class _HomePageState extends State<HomePage> {
                 );
               },
               child: Container(
-                key: ValueKey<int>(_selectedIndex),
+                //key: ValueKey<int>(_selectedIndex),
                 color: backgroundColor, // Ensures background remains black
-                //padding: const EdgeInsets.only(top: 0),
                 child: _selectedIndex == 0
                     ? buildTasksLayout()
                     : buildChartLayout(),

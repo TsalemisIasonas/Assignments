@@ -1,5 +1,6 @@
 import 'package:assignments/data/database.dart';
 import 'package:assignments/util/todo_tile.dart';
+import 'package:assignments/util/todo_tile_shrinked.dart';
 import 'package:flutter/material.dart';
 
 class TilesLayout extends StatefulWidget {
@@ -23,6 +24,7 @@ class TilesLayout extends StatefulWidget {
 }
 
 class _TilesLayoutState extends State<TilesLayout> {
+  bool _showGridView = false;
   bool _showSearch = false;
   String _searchQuery = '';
   final ScrollController _scrollController = ScrollController();
@@ -65,6 +67,9 @@ class _TilesLayoutState extends State<TilesLayout> {
                           hintText: 'Search tasks...',
                           hintStyle: TextStyle(color: Colors.white54),
                           border: InputBorder.none,
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                          isDense: true,
                         ),
                         onChanged: (value) {
                           setState(() {
@@ -84,55 +89,119 @@ class _TilesLayoutState extends State<TilesLayout> {
                         ),
                       ),
               ),
-              IconButton(
-                icon: Icon(
-                  _showSearch ? Icons.close : Icons.search,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  setState(() {
-                    if (_showSearch) {
-                      _searchQuery = '';
-                    }
-                    _showSearch = !_showSearch;
-                  });
-                },
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      _showSearch ? Icons.close : Icons.search,
+                      color: Colors.white,
+                    ),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    onPressed: () {
+                      setState(() {
+                        if (_showSearch) {
+                          _searchQuery = '';
+                        }
+                        _showSearch = !_showSearch;
+                      });
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.grid_view,
+                      color: _showGridView ? Colors.green : Colors.white,
+                    ),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    onPressed: () {
+                      setState(() {
+                        _showGridView = !_showGridView;
+                      });
+                    },
+                  ),
+                ],
               ),
             ],
           ),
         ),
         SizedBox(
           height: 270,
-          child: ListView.builder(
-            controller: _scrollController,
-            scrollDirection: Axis.horizontal,
-            itemCount: filteredList.length,
-            itemBuilder: (context, index) {
-              final originalIndex = widget.db.toDoList.indexOf(filteredList[index]);
-              final isPinned = filteredList[index].length > 4 && filteredList[index][4] == true;
-              return ToDoTile(
-                taskTitle: filteredList[index][0],
-                taskContent: filteredList[index][1],
-                taskDateTime: filteredList[index][2],
-                taskCompleted: filteredList[index][3],
-                onChanged: (value) => widget.onChanged(value, originalIndex),
-                deleteFunction: () => widget.onDelete(originalIndex),
-                editFunction: () => widget.onEdit(originalIndex),
-                isPinned: isPinned,
-                onPin: () {
-                  widget.onPin(originalIndex, !isPinned);
-                  setState(() {});
-                  // Scroll to start after pin/unpin
-                  _scrollController.animateTo(
-                    0.0,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeOut,
-                  );
-                },
-              );
-            },
-          ),
-        ),
+          child: !_showGridView
+              ? ListView.builder(
+                  controller: _scrollController,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: filteredList.length,
+                  itemBuilder: (context, index) {
+                    final originalIndex =
+                        widget.db.toDoList.indexOf(filteredList[index]);
+                    final isPinned = filteredList[index].length > 4 &&
+                        filteredList[index][4] == true;
+                    return ToDoTile(
+                      taskTitle: filteredList[index][0],
+                      taskContent: filteredList[index][1],
+                      taskDateTime: filteredList[index][2],
+                      taskCompleted: filteredList[index][3],
+                      onChanged: (value) =>
+                          widget.onChanged(value, originalIndex),
+                      deleteFunction: () => widget.onDelete(originalIndex),
+                      editFunction: () => widget.onEdit(originalIndex),
+                      isPinned: isPinned,
+                      onPin: () {
+                        widget.onPin(originalIndex, !isPinned);
+                        setState(() {});
+                        // Scroll to start after pin/unpin
+                        _scrollController.animateTo(
+                          0.0,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeOut,
+                        );
+                      },
+                    );
+                  },
+                )
+              : Align(
+                  alignment: Alignment.topCenter,
+                  child: GridView.builder(
+                    controller: _scrollController,
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 8.0,
+                      mainAxisSpacing: 8.0,
+                      childAspectRatio: 2.5,
+                    ),
+                    itemCount: filteredList.length,
+                    itemBuilder: (context, index) {
+                    final originalIndex =
+                        widget.db.toDoList.indexOf(filteredList[index]);
+                    final isPinned = filteredList[index].length > 4 &&
+                        filteredList[index][4] == true;
+                    return ToDoTileShrinked(
+                      taskTitle: filteredList[index][0],
+                      taskDateTime: filteredList[index][2],
+                      taskCompleted: filteredList[index][3],
+                      onChanged: (value) =>
+                          widget.onChanged(value, originalIndex),
+                      deleteFunction: () => widget.onDelete(originalIndex),
+                      editFunction: () => widget.onEdit(originalIndex),
+                      isPinned: isPinned,
+                      onPin: () {
+                        widget.onPin(originalIndex, !isPinned);
+                        setState(() {});
+                        // Scroll to start after pin/unpin
+                        _scrollController.animateTo(
+                          0.0,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeOut,
+                        );
+                      },
+                    );
+                  },
+                ),
+        ),),
       ],
     );
   }
