@@ -1,6 +1,7 @@
 import 'package:assignments/data/database.dart';
 import 'package:assignments/util/todo_tile.dart';
 import 'package:assignments/util/todo_tile_shrinked.dart';
+import 'package:assignments/widgets/expandable_task_card.dart'; // make sure this is imported
 import 'package:flutter/material.dart';
 
 class TilesLayout extends StatefulWidget {
@@ -31,7 +32,6 @@ class _TilesLayoutState extends State<TilesLayout> {
 
   @override
   Widget build(BuildContext context) {
-    // Filter tasks based on search query
     final filteredList = _searchQuery.isEmpty
         ? widget.db.toDoList
         : widget.db.toDoList.where((task) {
@@ -41,7 +41,6 @@ class _TilesLayoutState extends State<TilesLayout> {
                 content.contains(_searchQuery.toLowerCase());
           }).toList();
 
-    // Sort: pinned tasks first
     filteredList.sort((a, b) {
       final aPinned = a.length > 4 && a[4] == true;
       final bPinned = b.length > 4 && b[4] == true;
@@ -53,6 +52,7 @@ class _TilesLayoutState extends State<TilesLayout> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // header row (search + toggle)
         Padding(
           padding: EdgeInsets.symmetric(
               horizontal: AppBar().titleSpacing ?? 16.0, vertical: 5.0),
@@ -101,9 +101,7 @@ class _TilesLayoutState extends State<TilesLayout> {
                     constraints: const BoxConstraints(),
                     onPressed: () {
                       setState(() {
-                        if (_showSearch) {
-                          _searchQuery = '';
-                        }
+                        if (_showSearch) _searchQuery = '';
                         _showSearch = !_showSearch;
                       });
                     },
@@ -126,6 +124,8 @@ class _TilesLayoutState extends State<TilesLayout> {
             ],
           ),
         ),
+
+        // list/grid view
         SizedBox(
           height: 270,
           child: !_showGridView
@@ -138,26 +138,82 @@ class _TilesLayoutState extends State<TilesLayout> {
                         widget.db.toDoList.indexOf(filteredList[index]);
                     final isPinned = filteredList[index].length > 4 &&
                         filteredList[index][4] == true;
-                    return ToDoTile(
-                      taskTitle: filteredList[index][0],
-                      taskContent: filteredList[index][1],
-                      taskDateTime: filteredList[index][2],
-                      taskCompleted: filteredList[index][3],
-                      onChanged: (value) =>
-                          widget.onChanged(value, originalIndex),
-                      deleteFunction: () => widget.onDelete(originalIndex),
-                      editFunction: () => widget.onEdit(originalIndex),
-                      isPinned: isPinned,
-                      onPin: () {
-                        widget.onPin(originalIndex, !isPinned);
-                        setState(() {});
-                        // Scroll to start after pin/unpin
-                        _scrollController.animateTo(
-                          0.0,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeOut,
+
+                    final task = filteredList[index];
+                    final heroTag = 'task_$originalIndex';
+
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            transitionDuration:
+                                const Duration(milliseconds: 400),
+                            pageBuilder: (context, animation, secondaryAnimation) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: Scaffold(
+                                  backgroundColor: Colors.black,
+                                  body: Center(
+                                    child: Hero(
+                                      tag: heroTag,
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: ExpandableTaskCard(
+                                          taskTitle: task[0],
+                                          taskContent: task[1],
+                                          taskDateTime: task[2],
+                                          taskCompleted: task[3],
+                                          isPinned: isPinned,
+                                          tileBackgroundColor: Colors.black87,
+                                          tileHeaderColor: Colors.white,
+                                          tileBorderColor: Colors.green,
+                                          textColor: Colors.white,
+                                          onPin: () =>
+                                              widget.onPin(originalIndex, !isPinned),
+                                          deleteFunction: () =>
+                                              widget.onDelete(originalIndex),
+                                          editFunction: () =>
+                                              widget.onEdit(originalIndex),
+                                          onChanged: (value) =>
+                                              widget.onChanged(value, originalIndex),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         );
                       },
+                      child: SizedBox(
+                        width: 300,
+                        height: 250,
+                        child: Hero(
+                          tag: heroTag,
+                          child: ToDoTile(
+                            taskTitle: task[0],
+                            taskContent: task[1],
+                            taskDateTime: task[2],
+                            taskCompleted: task[3],
+                            onChanged: (value) =>
+                                widget.onChanged(value, originalIndex),
+                            deleteFunction: () => widget.onDelete(originalIndex),
+                            editFunction: () => widget.onEdit(originalIndex),
+                            isPinned: isPinned,
+                            onPin: () {
+                              widget.onPin(originalIndex, !isPinned);
+                              setState(() {});
+                              _scrollController.animateTo(
+                                0.0,
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeOut,
+                              );
+                            },
+                          ),
+                        ),
+                      ),
                     );
                   },
                 )
@@ -167,7 +223,8 @@ class _TilesLayoutState extends State<TilesLayout> {
                     controller: _scrollController,
                     padding: EdgeInsets.zero,
                     shrinkWrap: true,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       crossAxisSpacing: 8.0,
                       mainAxisSpacing: 8.0,
@@ -175,33 +232,33 @@ class _TilesLayoutState extends State<TilesLayout> {
                     ),
                     itemCount: filteredList.length,
                     itemBuilder: (context, index) {
-                    final originalIndex =
-                        widget.db.toDoList.indexOf(filteredList[index]);
-                    final isPinned = filteredList[index].length > 4 &&
-                        filteredList[index][4] == true;
-                    return ToDoTileShrinked(
-                      taskTitle: filteredList[index][0],
-                      taskDateTime: filteredList[index][2],
-                      taskCompleted: filteredList[index][3],
-                      onChanged: (value) =>
-                          widget.onChanged(value, originalIndex),
-                      deleteFunction: () => widget.onDelete(originalIndex),
-                      editFunction: () => widget.onEdit(originalIndex),
-                      isPinned: isPinned,
-                      onPin: () {
-                        widget.onPin(originalIndex, !isPinned);
-                        setState(() {});
-                        // Scroll to start after pin/unpin
-                        _scrollController.animateTo(
-                          0.0,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeOut,
-                        );
-                      },
-                    );
-                  },
+                      final originalIndex =
+                          widget.db.toDoList.indexOf(filteredList[index]);
+                      final isPinned = filteredList[index].length > 4 &&
+                          filteredList[index][4] == true;
+                      return ToDoTileShrinked(
+                        taskTitle: filteredList[index][0],
+                        taskDateTime: filteredList[index][2],
+                        taskCompleted: filteredList[index][3],
+                        onChanged: (value) =>
+                            widget.onChanged(value, originalIndex),
+                        deleteFunction: () => widget.onDelete(originalIndex),
+                        editFunction: () => widget.onEdit(originalIndex),
+                        isPinned: isPinned,
+                        onPin: () {
+                          widget.onPin(originalIndex, !isPinned);
+                          setState(() {});
+                          _scrollController.animateTo(
+                            0.0,
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeOut,
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
-        ),),
+        ),
       ],
     );
   }

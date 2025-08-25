@@ -30,9 +30,14 @@ class MyChart extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             Text(
-              '${completedPercent.toStringAsPrecision(2)} %',
+              '${completedPercent.toStringAsFixed(0)} %',
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                  color: textColor, fontSize: 25, fontWeight: FontWeight.w300),
+                color: textColor,
+                fontSize: 25,
+                fontWeight: FontWeight.w300,
+              ),
             ),
             PieChart(
               PieChartData(
