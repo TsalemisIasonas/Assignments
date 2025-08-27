@@ -1,4 +1,6 @@
+import 'package:assignments/widgets/expandable_task_card.dart';
 import 'package:flutter/material.dart';
+import '../constants/colors.dart';
 
 class ToDoTile extends StatelessWidget {
   final String taskTitle;
@@ -10,6 +12,7 @@ class ToDoTile extends StatelessWidget {
   final VoidCallback editFunction;
   final VoidCallback onPin;
   final ValueChanged<bool?> onChanged;
+  final int index;
 
   const ToDoTile({
     super.key,
@@ -22,107 +25,67 @@ class ToDoTile extends StatelessWidget {
     required this.editFunction,
     required this.onPin,
     required this.onChanged,
+    required this.index,
   });
 
-  void _showExpandedCard(BuildContext context) {
+  void _showFullScreenCard(BuildContext context) {
     Navigator.of(context).push(PageRouteBuilder(
-      opaque: false, // keep background visible
-      barrierColor: Colors.black54, // dimmed background
+      opaque: false,
+      barrierColor: Colors.black54,
       transitionDuration: const Duration(milliseconds: 400),
-      reverseTransitionDuration: const Duration(milliseconds: 300),
-      pageBuilder: (_, __, ___) {
-        return Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Center(
-            child: AnimatedScale(
-              duration: const Duration(milliseconds: 300),
-              scale: 1.0,
-              curve: Curves.easeOutBack,
+      pageBuilder: (_, __, ___) => Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Center(
+          child: Hero(
+            tag: 'task_$index',
+            child: Material(
+              color: Colors.transparent,
               child: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height * 0.8,
-                child: Material(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Colors.grey[900],
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        Text(
-                          taskTitle,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Expanded(
-                          child: SingleChildScrollView(
-                            child: Text(
-                              taskContent,
-                              style: const TextStyle(
-                                color: Colors.white70,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: deleteFunction,
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.edit, color: Colors.blue),
-                              onPressed: editFunction,
-                            ),
-                            IconButton(
-                              icon: Icon(
-                                isPinned
-                                    ? Icons.push_pin
-                                    : Icons.push_pin_outlined,
-                                color: Colors.white,
-                              ),
-                              onPressed: onPin,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        ElevatedButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: const Text("Close"),
-                        ),
-                      ],
-                    ),
-                  ),
+                width: MediaQuery.of(context).size.width * 0.85,
+                height: MediaQuery.of(context).size.height * 0.4,
+                child: ExpandableTaskCard(
+                  taskTitle: taskTitle,
+                  taskContent: taskContent,
+                  taskDateTime: taskDateTime,
+                  taskCompleted: taskCompleted,
+                  isPinned: isPinned,
+                  deleteFunction: deleteFunction,
+                  editFunction: editFunction,
+                  onPin: onPin,
+                  onChanged: onChanged,
+                  tileBackgroundColor: tileBackgroundColor,
+                  tileHeaderColor: tileHeaderColor,
+                  tileBorderColor: tileBorderColor,
+                  textColor: textColor,
                 ),
               ),
             ),
           ),
-        );
-      },
+        ),
+      ),
     ));
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => _showExpandedCard(context),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        color: Colors.grey[900],
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Text(
-            taskTitle,
-            style: const TextStyle(color: Colors.white),
-          ),
+      onTap: () => _showFullScreenCard(context),
+      child: Hero(
+        tag: 'task_$index',
+        child: ExpandableTaskCard(
+          taskTitle: taskTitle,
+          taskContent: taskContent,
+          taskDateTime: taskDateTime,
+          taskCompleted: taskCompleted,
+          isPinned: isPinned,
+          deleteFunction: deleteFunction,
+          editFunction: editFunction,
+          onPin: onPin,
+          onChanged: onChanged,
+          tileBackgroundColor: tileBackgroundColor,
+          tileHeaderColor: tileHeaderColor,
+          tileBorderColor: tileBorderColor,
+          textColor: textColor,
         ),
       ),
     );
