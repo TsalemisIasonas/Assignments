@@ -1,0 +1,21 @@
+# Tell GitHub Linguist to ignore build artifacts and generated files
+build/ linguist-vendored
+.dart_tool/ linguist-vendored
+.flutter-plugins* linguist-vendored
+.flutter-plugins-dependencies linguist-vendored
+.packages linguist-vendored
+.pub-cache/ linguist-vendored
+.pub/ linguist-vendored
+
+# Ignore web build outputs (HTML/JS/CSS)
+web/ linguist-vendored
+
+# Ignore platform-specific build files
+android/ linguist-vendored
+ios/ linguist-vendored
+macos/ linguist-vendored
+windows/ linguist-vendored
+linux/ linguist-vendored
+
+# Ensure Dart files are detected as source
+*.dart linguist-detectable=true
