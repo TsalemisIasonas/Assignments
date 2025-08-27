@@ -50,7 +50,7 @@ class ExpandableTaskCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: tileBorderColor),
           ),
-          child: Stack(
+          child: Stack( 
             children: [
               // Scrollable content
               Padding(
