@@ -5,7 +5,7 @@ import '../constants/colors.dart';
 
 void main() async {
   // init the hive
-  await Hive.initFlutter();
+  await Hive.initFlutter(); 
 
   // open a box
   // ignore: unused_local_variable
