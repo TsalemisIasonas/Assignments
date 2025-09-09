@@ -1,4 +1,4 @@
-import 'package:assignments/data/database.dart';
+import '../data/database.dart';
 import 'package:flutter/material.dart';
 
 class UsernameDialogBox extends StatelessWidget {

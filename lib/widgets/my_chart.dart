@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:assignments/data/database.dart';
+import '../data/database.dart';
 import '../constants/colors.dart';
 
 class MyChart extends StatelessWidget {

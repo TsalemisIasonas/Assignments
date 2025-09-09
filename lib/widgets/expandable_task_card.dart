@@ -1,4 +1,4 @@
-import 'package:assignments/constants/colors.dart';
+import '../constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class ExpandableTaskCard extends StatelessWidget {
@@ -50,7 +50,7 @@ class ExpandableTaskCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: tileBorderColor),
           ),
-          child: Stack( 
+          child: Stack(
             children: [
               // Scrollable content
               Padding(
@@ -96,13 +96,17 @@ class ExpandableTaskCard extends StatelessWidget {
                           color: textColor,
                           fontWeight: FontWeight.w600,
                           fontSize: 18,
-                          decoration:
-                              taskCompleted ? TextDecoration.lineThrough : TextDecoration.none,
+                          decoration: taskCompleted
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
                         ),
                       ),
                     ),
                     IconButton(
-                      icon: Icon(isPinned ? Icons.push_pin : Icons.push_pin_outlined,
+                      icon: Icon(
+                          isPinned
+                              ? Icons.push_pin
+                              : Icons.push_pin_outlined,
                           color: Colors.white),
                       onPressed: onPin,
                     ),
@@ -116,7 +120,8 @@ class ExpandableTaskCard extends StatelessWidget {
                 right: 0,
                 bottom: 0,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   color: Colors.transparent,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -139,12 +144,14 @@ class ExpandableTaskCard extends StatelessWidget {
                           IconButton(
                             padding: EdgeInsets.zero,
                             onPressed: deleteFunction,
-                            icon: const Icon(Icons.delete, color: Colors.white, size: 25),
+                            icon: const Icon(Icons.delete,
+                                color: Colors.white, size: 25),
                           ),
                           IconButton(
                             padding: EdgeInsets.zero,
                             onPressed: editFunction,
-                            icon: const Icon(Icons.edit, color: Colors.white, size: 25),
+                            icon: const Icon(Icons.edit,
+                                color: Colors.white, size: 25),
                           ),
                         ],
                       ),

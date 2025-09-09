@@ -1,4 +1,4 @@
-import 'package:assignments/constants/colors.dart';
+import '../constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class ToDoTileShrinked extends StatelessWidget {

@@ -1,6 +1,6 @@
-import 'package:assignments/data/database.dart';
-import 'package:assignments/util/todo_tile.dart';
-import 'package:assignments/util/todo_tile_shrinked.dart';
+import '../data/database.dart';
+import '../util/todo_tile.dart';
+import '../util/todo_tile_shrinked.dart';
 import 'package:flutter/material.dart';
 
 class TilesLayout extends StatefulWidget {

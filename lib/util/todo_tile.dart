@@ -1,4 +1,4 @@
-import 'package:assignments/widgets/expandable_task_card.dart';
+import '../widgets/expandable_task_card.dart';
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 
@@ -29,41 +29,48 @@ class ToDoTile extends StatelessWidget {
   });
 
   void _showFullScreenCard(BuildContext context) {
-    Navigator.of(context).push(PageRouteBuilder(
-      opaque: false,
-      barrierColor: Colors.black54,
-      transitionDuration: const Duration(milliseconds: 400),
-      pageBuilder: (_, __, ___) => Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Center(
-          child: Hero(
-            tag: 'task_$index',
-            child: Material(
-              color: Colors.transparent,
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.85,
-                height: MediaQuery.of(context).size.height * 0.4,
-                child: ExpandableTaskCard(
-                  taskTitle: taskTitle,
-                  taskContent: taskContent,
-                  taskDateTime: taskDateTime,
-                  taskCompleted: taskCompleted,
-                  isPinned: isPinned,
-                  deleteFunction: deleteFunction,
-                  editFunction: editFunction,
-                  onPin: onPin,
-                  onChanged: onChanged,
-                  tileBackgroundColor: tileBackgroundColor,
-                  tileHeaderColor: tileHeaderColor,
-                  tileBorderColor: tileBorderColor,
-                  textColor: textColor,
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        opaque: false,
+        barrierColor: Colors.black54,
+        transitionDuration: const Duration(milliseconds: 400),
+        pageBuilder: (_, __, ___) => GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Center(
+              child: Hero(
+                tag: 'task_$index',
+                child: Material(
+                  color: Colors.transparent,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.85,
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    child: ExpandableTaskCard(
+                      taskTitle: taskTitle,
+                      taskContent: taskContent,
+                      taskDateTime: taskDateTime,
+                      taskCompleted: taskCompleted,
+                      isPinned: isPinned,
+                      deleteFunction: deleteFunction,
+                      editFunction: editFunction,
+                      onPin: onPin,
+                      onChanged: onChanged,
+                      tileBackgroundColor: tileBackgroundColor,
+                      tileHeaderColor: tileHeaderColor,
+                      tileBorderColor: tileBorderColor,
+                      textColor: textColor,
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
         ),
       ),
-    ));
+    );
   }
 
   @override

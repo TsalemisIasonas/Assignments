@@ -4,8 +4,9 @@ import 'pages/home_page.dart';
 import '../constants/colors.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   // init the hive
-  await Hive.initFlutter(); 
+  await Hive.initFlutter();
 
   // open a box
   // ignore: unused_local_variable

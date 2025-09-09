@@ -1,6 +1,6 @@
-import 'package:assignments/util/username_dialog_box.dart';
-import 'package:assignments/widgets/my_chart.dart';
-import 'package:assignments/widgets/tiles_layout.dart';
+import '../util/username_dialog_box.dart';
+import '../widgets/my_chart.dart';
+import '../widgets/tiles_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../data/database.dart';
@@ -201,7 +201,7 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ),
-              // const PopupMenuItem<String>( 
+              // const PopupMenuItem<String>(
               //   value: 'Delete',
               //   // We'll apply the same padding here for a consistent look.
               //   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
