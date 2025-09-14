@@ -184,7 +184,9 @@ class _TilesLayoutState extends State<TilesLayout> {
                       final isPinned = filteredList[index].length > 4 &&
                           filteredList[index][4] == true;
                       return ToDoTileShrinked(
+                        index: originalIndex,
                         taskTitle: filteredList[index][0],
+                        taskContent: filteredList[index][1],
                         taskDateTime: filteredList[index][2],
                         taskCompleted: filteredList[index][3],
                         onChanged: (value) =>
